@@ -2,6 +2,7 @@ package com.robertdennett.orderTracker.service;
 
 import com.robertdennett.orderTracker.dto.CartDTO;
 import com.robertdennett.orderTracker.dto.CartDTOMapper;
+import com.robertdennett.orderTracker.exception.ResourceNotFoundException;
 import com.robertdennett.orderTracker.model.Customer;
 import com.robertdennett.orderTracker.model.Cart;
 import com.robertdennett.orderTracker.repository.CustomerRepository;
@@ -44,7 +45,7 @@ public class CartService {
     public void createNewCart(Long customerId) {
         Optional<Customer> cust = customerRepository.findById(customerId);
         if (!cust.isPresent()) {
-            throw new IllegalStateException("Unable to create cart.  Invalid customer id: " + customerId);
+            throw new ResourceNotFoundException("Unable to create cart.  Invalid customer id: " + customerId);
         }
 
         Cart cart = Cart.builder()
@@ -57,7 +58,7 @@ public class CartService {
 
     public void deleteCart(long cartId) {
         if (!cartRepository.existsById(cartId)) {
-            throw new IllegalArgumentException("Cart doesn't exist for id " + cartId);
+            throw new ResourceNotFoundException("Cart doesn't exist for id " + cartId);
         }
         cartRepository.deleteById(cartId);
     }

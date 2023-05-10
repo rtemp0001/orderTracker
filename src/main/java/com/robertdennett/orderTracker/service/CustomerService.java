@@ -1,6 +1,7 @@
 package com.robertdennett.orderTracker.service;
 
 import com.robertdennett.orderTracker.dto.*;
+import com.robertdennett.orderTracker.exception.ResourceNotFoundException;
 import com.robertdennett.orderTracker.model.Customer;
 import com.robertdennett.orderTracker.repository.CustomerRepository;
 import lombok.RequiredArgsConstructor;
@@ -32,7 +33,7 @@ public class CustomerService {
     public CustomerDTO getCustomer(long id) {
         Optional<Customer> cust =  customerRepository.findById(id);
         if (!cust.isPresent()) {
-            throw new IllegalArgumentException("No customer with id " + id);
+            throw new ResourceNotFoundException("No customer with id " + id);
         }
         return customerDTOMapper.apply(cust.get());
     }
@@ -40,7 +41,7 @@ public class CustomerService {
     public List<CartDTO> getCartsForCustomer(long customerId) {
         Optional<Customer> cust = customerRepository.findById(customerId);
         if (!cust.isPresent()) {
-            throw new IllegalArgumentException("No customer with id " + customerId);
+            throw new ResourceNotFoundException("No customer with id " + customerId);
         }
         return cust.get().getCarts()
                 .stream()

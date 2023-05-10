@@ -2,6 +2,7 @@ package com.robertdennett.orderTracker.service;
 
 import com.robertdennett.orderTracker.dto.CartDTOMapper;
 import com.robertdennett.orderTracker.dto.ItemDTOMapper;
+import com.robertdennett.orderTracker.exception.ResourceNotFoundException;
 import com.robertdennett.orderTracker.model.Cart;
 import com.robertdennett.orderTracker.model.Customer;
 import com.robertdennett.orderTracker.model.Item;
@@ -66,7 +67,7 @@ class CartServiceTest {
     void testCreateNewCart() {
         // confirm that it throws an exception if the resource isn't found
         // and that we don't call save()
-        assertThatExceptionOfType(IllegalStateException.class)
+        assertThatExceptionOfType(ResourceNotFoundException.class)
                 .isThrownBy(() -> underTest.createNewCart(1L));
 
         verify(cartRepository, never()).save(any());
@@ -96,7 +97,7 @@ class CartServiceTest {
 
     @Test
     void deleteCart() {
-        assertThatExceptionOfType(IllegalArgumentException.class)
+        assertThatExceptionOfType(ResourceNotFoundException.class)
                 .isThrownBy(() -> underTest.deleteCart(1L));
 
         verify(cartRepository, never()).deleteById(anyLong());

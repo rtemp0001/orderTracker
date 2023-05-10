@@ -1,6 +1,8 @@
 package com.robertdennett.orderTracker.service;
 
 import com.robertdennett.orderTracker.dto.NewItemRequest;
+import com.robertdennett.orderTracker.exception.BadRequestException;
+import com.robertdennett.orderTracker.exception.ResourceNotFoundException;
 import com.robertdennett.orderTracker.model.Cart;
 import com.robertdennett.orderTracker.model.Item;
 import com.robertdennett.orderTracker.model.Product;
@@ -53,7 +55,7 @@ class ItemServiceTest {
         // confirm that it throws an exception if the cart isn't found
         // and that we don't call save()
         NewItemRequest request1 = new NewItemRequest(1L, 1L, 0);
-        assertThatExceptionOfType(IllegalArgumentException.class)
+        assertThatExceptionOfType(ResourceNotFoundException.class)
                 .isThrownBy(() -> underTest.addItemToCart(request1))
                 .withMessage("No cart found with id 1");
 
@@ -72,7 +74,7 @@ class ItemServiceTest {
 
         // confirm that it throws an exception if the product isn't found
         // and that we don't call save()
-        assertThatExceptionOfType(IllegalArgumentException.class)
+        assertThatExceptionOfType(ResourceNotFoundException.class)
                 .isThrownBy(() -> underTest.addItemToCart(request2))
                 .withMessage("No product found with id 1");
 
@@ -89,7 +91,7 @@ class ItemServiceTest {
 
         // confirm that it throws an exception if the quantity <= 0
         // and that we don't call save()
-        assertThatExceptionOfType(IllegalArgumentException.class)
+        assertThatExceptionOfType(BadRequestException.class)
                 .isThrownBy(() -> underTest.addItemToCart(request3))
                 .withMessage("Quantity must be greater than 0");
 
@@ -112,7 +114,7 @@ class ItemServiceTest {
 
     @Test
     void testDeleteItemFromCart() {
-        assertThatExceptionOfType(IllegalArgumentException.class)
+        assertThatExceptionOfType(ResourceNotFoundException.class)
                 .isThrownBy(() -> underTest.deleteItemFromCart(1L, 1L))
                 .withMessage("Cart item does not exist with id 1");
 
@@ -125,7 +127,7 @@ class ItemServiceTest {
         given(itemRepository.existsById(1L))
                 .willReturn(true);
 
-        assertThatExceptionOfType(IllegalArgumentException.class)
+        assertThatExceptionOfType(ResourceNotFoundException.class)
                 .isThrownBy(() -> underTest.deleteItemFromCart(1L, 1L))
                 .withMessage("No cart exists for cart id 1");
 

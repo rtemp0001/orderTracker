@@ -1,6 +1,8 @@
 package com.robertdennett.orderTracker.service;
 
 import com.robertdennett.orderTracker.dto.NewItemRequest;
+import com.robertdennett.orderTracker.exception.BadRequestException;
+import com.robertdennett.orderTracker.exception.ResourceNotFoundException;
 import com.robertdennett.orderTracker.model.Cart;
 import com.robertdennett.orderTracker.model.Item;
 import com.robertdennett.orderTracker.model.Product;
@@ -26,17 +28,17 @@ public class ItemService {
         Optional<Cart> cart = cartRepository.findById(request.cartId());
 
         if (!cart.isPresent()) {
-            throw new IllegalArgumentException("No cart found with id " + request.cartId());
+            throw new ResourceNotFoundException("No cart found with id " + request.cartId());
         }
 
         Optional<Product> product = productRepository.findById(request.productId());
 
         if (!product.isPresent()) {
-            throw new IllegalArgumentException("No product found with id " + request.productId());
+            throw new ResourceNotFoundException("No product found with id " + request.productId());
         }
 
         if (request.quantity() < 1) {
-            throw new IllegalArgumentException("Quantity must be greater than 0");
+            throw new BadRequestException("Quantity must be greater than 0");
         }
 
         Item item = Item.builder()
@@ -49,11 +51,11 @@ public class ItemService {
 
     public void deleteItemFromCart(long itemId, long cartId) {
         if (!itemRepository.existsById(itemId)) {
-            throw new IllegalArgumentException("Cart item does not exist with id " + itemId);
+            throw new ResourceNotFoundException("Cart item does not exist with id " + itemId);
         }
         Optional<Cart> cart = cartRepository.findById(cartId);
         if (!cart.isPresent()) {
-            throw new IllegalArgumentException("No cart exists for cart id " + cartId);
+            throw new ResourceNotFoundException("No cart exists for cart id " + cartId);
         }
 
         itemRepository.deleteById(itemId);

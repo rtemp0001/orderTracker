@@ -27,7 +27,7 @@ public class CustomerService {
         return customerRepository.findAll()
                 .stream()
                 .map(customerDTOMapper)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     public CustomerDTO getCustomer(long id) {
@@ -46,7 +46,7 @@ public class CustomerService {
         return cust.get().getCarts()
                 .stream()
                 .map(cartDTOMapper)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     public void createCustomer(NewCustomerRequest request) {

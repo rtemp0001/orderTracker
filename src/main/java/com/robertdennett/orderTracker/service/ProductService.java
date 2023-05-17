@@ -20,7 +20,7 @@ public class ProductService {
         return productRepository.findAll()
                 .stream()
                 .map(p -> new ProductDTO(p.getId(), p.getName()))
-                .collect(Collectors.toList());
+                .toList();
     }
 
     public void addProduct(NewProductRequest request) {

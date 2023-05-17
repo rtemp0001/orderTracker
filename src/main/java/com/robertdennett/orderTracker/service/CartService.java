@@ -32,7 +32,7 @@ public class CartService {
         return cartRepository.findAll()
                 .stream()
                 .map(cartDTOMapper)
-                .collect(Collectors.toList());
+                .toList();
     }
 
 //    public List<CartDTO> getCartsForCustomer(Long customerId) {
